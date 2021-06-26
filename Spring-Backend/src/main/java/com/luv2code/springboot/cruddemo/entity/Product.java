@@ -47,15 +47,18 @@ public class Product {
 
 	
 	@Column(name="product_desc")
-	private String description;
+	private String product_desc;
 
-	public String getDescription() {
-		return this.description;
+	public String getProduct_desc() {
+		return this.product_desc;
 	}
 
-	public void setDescription(String description) {
-		this.description = description;
+	public void setProduct_desc(String product_desc) {
+		this.product_desc = product_desc;
 	}
+
+
+	
 
 	
 	@Column(name="price")
@@ -96,7 +99,7 @@ public class Product {
 		this.orders = orders;
 	}
 	
-	@Column(name='product_image')
+	@Column(name="product_image")
     private String product_image;
 
 	public String getProduct_image() {
@@ -112,10 +115,16 @@ public class Product {
 	public Product() {
 		
 	}
+    
+	public Product(String product_name,float price,int quantity){
+        this.product_name = product_name;
+		this.quantity = quantity;
+        this.price=price;
+	}
 
 	public Product(String product_name, String product_desc, float price,int quantity,String product_image) {
 		this.product_name = product_name;
-		this.description= product_desc;
+		this.product_desc= product_desc;
 		this.quantity = quantity;
         this.price=price;
 		this.product_image=product_image;
@@ -128,7 +137,7 @@ public class Product {
 
 	@Override
 	public String toString() {
-		return "Product [id=" + id + ", Name=" + product_name+ ", Description=" + description + ", qty=" + quantity + ", price="+price+" ]";
+		return "Product [id=" + id + ", Name=" + product_name+ ", Description=" + product_desc + ", qty=" + quantity + ", price="+price+" ]";
 	}
 		
 }

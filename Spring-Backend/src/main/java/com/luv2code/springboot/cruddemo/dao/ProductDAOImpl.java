@@ -3,44 +3,44 @@ package com.luv2code.springboot.cruddemo.dao;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-
+import javax.persistence.TypedQuery;
 import org.hibernate.Session;
-import org.hibernate.query.Query;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.luv2code.springboot.cruddemo.entity.User;
+import com.luv2code.springboot.cruddemo.entity.Product;
 
 @Repository
-public class UserDAOHibernateImpl implements UserDAO {
+public class ProductDAOImpl implements ProductsDAO {
 
 	// define field for entitymanager	
 	private EntityManager entityManager;
 		
 	// set up constructor injection
 	@Autowired
-	public UserDAOHibernateImpl(EntityManager theEntityManager) {
+	public ProductDAOImpl(EntityManager theEntityManager) {
 		entityManager = theEntityManager;
 	}
 	
 	
 	@Override
 	@Transactional
-	public List<User> findAll() {
+	public List<Product> findAll() {
 
 		// get the current hibernate session
 		Session currentSession = entityManager.unwrap(Session.class);
 		
 		// create a query
-		Query<User> theQuery =
-				currentSession.createQuery("from User", User.class);
+		TypedQuery<Product> theQuery =
+				currentSession.createQuery("select new Product(p.product_name,p.price,p.quantity) from Product p", Product.class);
 		
 		// execute query and get result list
-		List<User> Users = theQuery.getResultList();
+		List<Product> products = theQuery.getResultList();
 		
 		// return the results		
-		return Users;
+		return products;
 	}
 
 }
