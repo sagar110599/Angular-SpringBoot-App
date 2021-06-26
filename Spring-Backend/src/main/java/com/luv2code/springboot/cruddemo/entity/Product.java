@@ -96,6 +96,16 @@ public class Product {
 		this.orders = orders;
 	}
 	
+	@Column(name='product_image')
+    private String product_image;
+
+	public String getProduct_image() {
+		return this.product_image;
+	}
+
+	public void setProduct_image(String product_image) {
+		this.product_image = product_image;
+	}
 
 	// define constructors
 	
@@ -103,11 +113,12 @@ public class Product {
 		
 	}
 
-	public Product(String product_name, String product_desc, float price,int quantity) {
+	public Product(String product_name, String product_desc, float price,int quantity,String product_image) {
 		this.product_name = product_name;
 		this.description= product_desc;
 		this.quantity = quantity;
         this.price=price;
+		this.product_image=product_image;
 	}
     
 
