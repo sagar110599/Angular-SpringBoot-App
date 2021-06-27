@@ -5,7 +5,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import org.hibernate.Session;
-
+import com.luv2code.springboot.cruddemo.exception.MyGeneralExe;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,7 +27,7 @@ public class ProductDAOImpl implements ProductsDAO {
 	
 	@Override
 	@Transactional
-	public List<Product> findAll() {
+	public List<Product> findAll() throws MyGeneralExe{
 
 		// get the current hibernate session
 		Session currentSession = entityManager.unwrap(Session.class);
@@ -39,7 +39,7 @@ public class ProductDAOImpl implements ProductsDAO {
 		// execute query and get result list
 		List<Product> products = theQuery.getResultList();
 		
-		// return the results		
+		//System.out.println("Last memmber is"+products.get(products.size()+2).getProduct_name());
 		return products;
 	}
 
