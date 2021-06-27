@@ -18,7 +18,8 @@ import { AdminProductComponent } from './admin/admin-product/admin-product.compo
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    
   ],
   providers: [],
   bootstrap: [AppComponent]

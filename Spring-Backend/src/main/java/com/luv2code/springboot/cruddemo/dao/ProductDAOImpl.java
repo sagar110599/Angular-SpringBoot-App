@@ -34,7 +34,7 @@ public class ProductDAOImpl implements ProductsDAO {
 		
 		// create a query
 		TypedQuery<Product> theQuery =
-				currentSession.createQuery("select new Product(p.product_name,p.price,p.quantity) from Product p", Product.class);
+				currentSession.createQuery("select new Product(p.id,p.product_name,p.product_desc,p.price) from Product p", Product.class);
 		
 		// execute query and get result list
 		List<Product> products = theQuery.getResultList();

@@ -1,31 +1,33 @@
 <br><br>
 <div class="container">
     <h2>Products Data</h2>
-    <p>Following Table contains the Data of Products</p>            
-    <table class="table">
+    <p>Following Table contains the Data of Products</p> 
+    <div class="form-outline SearchBar">
+      <input type="search" class="form-control" placeholder="Search here..." (input)="getSearch($event)"
+      aria-label="Search" />
+    </div>         
+    <table class="table" >
       <thead>
         <tr>
-          <th>Firstname</th>
-          <th>Lastname</th>
-          <th>Email</th>
+          <th>Sr.no</th>
+          <th>Product Name</th>
+          <th>Product Description</th>
+          <th>Product Price</th>
+          <th>Action</th>
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td>John</td>
-          <td>Doe</td>
-          <td>john@example.com</td>
+        
+          <tr *ngFor="let p of products;let i = index">
+            <td>{{i+1}}</td>
+            <td>{{p.product_name}}</td>
+            <td>{{p.product_desc}}</td>
+            <td>{{p.price}}</td>
+            
+            
+        
         </tr>
-        <tr>
-          <td>Mary</td>
-          <td>Moe</td>
-          <td>mary@example.com</td>
-        </tr>
-        <tr>
-          <td>July</td>
-          <td>Dooley</td>
-          <td>july@example.com</td>
-        </tr>
+       
       </tbody>
     </table>
   </div>
