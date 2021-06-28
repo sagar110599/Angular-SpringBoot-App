@@ -51,7 +51,7 @@ public class Order {
 	
 
 
-   @JsonManagedReference
+   
    @ManyToMany()  
    @JoinTable(name = "orders_product",   
             joinColumns = { @JoinColumn(name = "oid") },   

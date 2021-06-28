@@ -43,6 +43,15 @@ public class ProductDAOImpl implements ProductsDAO {
 		return products;
 	}
 
+	@Override
+	@Transactional
+	public Product addProduct(Product product) throws MyGeneralExe{
+
+	Session currentSession = entityManager.unwrap(Session.class);
+	currentSession.saveOrUpdate(product);
+	return product;	
+	}
+
 }
 
 

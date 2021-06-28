@@ -7,6 +7,8 @@ import { ProductComponent } from './product/product.component';
 import { ErrorComponent } from './error/error.component';
 import { AdminComponent } from './admin/admin.component';
 import { AdminProductComponent } from './admin/admin-product/admin-product.component';
+import { AddProductComponent } from './admin/add-product/add-product.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -14,11 +16,13 @@ import { AdminProductComponent } from './admin/admin-product/admin-product.compo
     ProductComponent,
     ErrorComponent,
     AdminComponent,
-    AdminProductComponent
+    AdminProductComponent,
+    AddProductComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
+    ReactiveFormsModule
     
   ],
   providers: [],

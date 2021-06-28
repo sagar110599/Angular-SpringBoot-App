@@ -36,7 +36,7 @@ public class User {
 	@Pattern(regexp="^+91-[0-9]{10}$")
 	private String contact;
 	
-	@JsonManagedReference
+	
 	@OneToMany(mappedBy="user")
 	private List<Order> orders;
 

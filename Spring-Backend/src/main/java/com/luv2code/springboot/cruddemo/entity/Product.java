@@ -84,7 +84,8 @@ public class Product {
 		this.quantity = quantity;
 	}
 
-	@JsonBackReference
+	
+	@JsonBackReference 
 	@ManyToMany()  
     @JoinTable(name = "orders_product",   
             joinColumns = { @JoinColumn(name = "pid") },   

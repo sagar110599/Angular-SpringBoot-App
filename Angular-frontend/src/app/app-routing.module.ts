@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { AddProductComponent } from './admin/add-product/add-product.component';
 import { AdminProductComponent } from './admin/admin-product/admin-product.component';
 import { AdminComponent } from './admin/admin.component';
 import { ErrorComponent } from './error/error.component';
@@ -10,6 +11,8 @@ const routes: Routes = [
   {path: 'admin', children:[
   {path: 'products', 
   component: AdminProductComponent},
+  {path: 'add-product', 
+  component: AddProductComponent},
   {path:'',
   component:AdminComponent 
   }
