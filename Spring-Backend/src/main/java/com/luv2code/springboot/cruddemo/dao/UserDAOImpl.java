@@ -42,6 +42,29 @@ public class UserDAOImpl implements UserDAO {
 		// return the results		
 		return Users;
 	}
+    
+	@Override
+	@Transactional
+	public boolean checkLogin(String email,String password) {
+
+		// get the current hibernate session
+		Session currentSession = entityManager.unwrap(Session.class);
+		
+		// create a query
+		Query<User> theQuery =
+				currentSession.createQuery("from User u where u.email=:email AND u.password=:password", User.class);
+		
+		theQuery.setParameter("email",email);
+		theQuery.setParameter("password",password);
+		List<User> Users = theQuery.getResultList();
+		if(Users.size()>0){
+			System.out.println(Users.get(0));
+			return true;
+		}
+		
+		// return the results		
+		return false;
+	}
 
 }
 

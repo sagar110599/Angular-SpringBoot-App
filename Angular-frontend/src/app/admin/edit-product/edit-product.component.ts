@@ -1,26 +1,38 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder,Validators } from '@angular/forms';
-
+import { ActivatedRoute, Params } from '@angular/router';
+import { Product } from 'src/app/interfaces/product';
 @Component({
-  selector: 'app-add-product',
-  templateUrl: './add-product.component.html',
-  styleUrls: ['./add-product.component.css']
+  selector: 'app-edit-product',
+  templateUrl: './edit-product.component.html',
+  styleUrls: ['./edit-product.component.css']
 })
-export class AddProductComponent implements OnInit {
+export class EditProductComponent implements OnInit {
   productForm:any;
+  product?:Product;
   data:any;
   submit:boolean=false;
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: FormBuilder,private route:ActivatedRoute) { }
 
   ngOnInit(): void {
     this.productForm = this.formBuilder.group({
+      id:[''],
       product_name:  ['', Validators.required],
       product_desc:  ['', Validators.required],
       price: ['', Validators.required],
       quantity: ['', Validators.required],
-      product_image: ['', Validators.required],
+      product_image: [''],
       
     });
+    fetch("http://localhost:8080/api/products/"+this.route.snapshot.params.id)
+    .then(response => response.json())
+    .then(data => {
+   this.product=data;
+    console.log(this.product);
+    this.setFormFields(this.product);
+  });
+      
+    
   }
 
 get f() { return this.productForm.controls; }  
@@ -38,12 +50,13 @@ reader.readAsDataURL(file);
   onSubmit(){
     this.submit=true;
   if (this.productForm.invalid) {
+    alert("Invalid Form.Fields Remaining");
       return;
   }else{
     this.data=this.productForm.value;
     
     
-    fetch("http://localhost:8080/api/products", {
+     fetch("http://localhost:8080/api/updateProducts", {
     method: "POST",
     body: JSON.stringify(this.data),
     headers: {
@@ -54,10 +67,22 @@ reader.readAsDataURL(file);
 })
 .then(response => response.json())
 .then(json => {console.log(json)
-alert("Product Added");
-this.productForm.reset();
-}); 
+alert("Product updated");
+this.ngOnInit();
+});  
   }
+}
+
+setFormFields(pro:any){
+  this.productForm.setValue({
+    id:pro.id,
+    product_name:  pro.product_name,
+    product_desc:  pro.product_desc, 
+    price: pro.price, 
+    quantity: pro.quantity, 
+    product_image: pro.product_image,
+    
+  });
 }
 
 }

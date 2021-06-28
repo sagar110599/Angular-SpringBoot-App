@@ -117,11 +117,13 @@ public class Product {
 		
 	}
     
-	public Product(int id,String product_name,String product_desc,float price){
+	public Product(int id,String product_name,String product_desc,float price,int quantity,String product_image){
 		this.id=id;
         this.product_name = product_name;
 		this.product_desc=product_desc;
         this.price=price;
+		this.quantity=quantity;
+		this.product_image=product_image;
 	}
 
 	public Product(String product_name, String product_desc, float price,int quantity,String product_image) {

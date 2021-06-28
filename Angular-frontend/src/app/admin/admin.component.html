@@ -1,1 +1,9 @@
-<p>admin works! Here lies admin login Page</p>
+<div class="log-form">
+    <h2>Admin Panel</h2>
+    <form>
+      <input type="email" title="username" placeholder="Email" #uname />
+      <input type="password" title="password" placeholder="Password" #password />
+      <button type="button" class="btn" (click)="checkLogin(uname.value,password.value)" >Login</button>
+      
+    </form>
+  </div><!--end log form -->

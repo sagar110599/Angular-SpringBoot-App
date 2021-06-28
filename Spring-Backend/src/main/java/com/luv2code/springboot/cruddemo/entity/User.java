@@ -48,6 +48,17 @@ public class User {
 		this.orders = orders;
 	}
 	
+	@Column(name="password")
+	private String password;
+
+	public String getPassword() {
+		return this.password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
 	// define constructors
 	
 	public User() {

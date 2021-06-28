@@ -11,5 +11,24 @@ export class AdminComponent implements OnInit {
 
   ngOnInit(): void {
   }
+checkLogin(uname:string ,password:string){
+  fetch("http://localhost:8080/api/login", {
+    method: "POST",
+    body: JSON.stringify({'email':uname,'password':password}),
+    headers: {
+      "Access-Control-Allow-Origin":"*",
+      "Access-Control-Allow-Methods":"DELETE, POST, GET, OPTIONS",
+        "Content-type": "application/json"
+    }
+})
+.then(response => response.json())
+.then(json => {
+  if(json['isLogin']==="true"){
+    window.location.href='./admin/products';
+  }else{
+    alert("Invalid Credentials");
+  }
 
+}); 
+}
 }

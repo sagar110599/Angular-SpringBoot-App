@@ -34,7 +34,7 @@ public class ProductDAOImpl implements ProductsDAO {
 		
 		// create a query
 		TypedQuery<Product> theQuery =
-				currentSession.createQuery("select new Product(p.id,p.product_name,p.product_desc,p.price) from Product p", Product.class);
+				currentSession.createQuery("from Product p", Product.class);
 		
 		// execute query and get result list
 		List<Product> products = theQuery.getResultList();
@@ -51,6 +51,38 @@ public class ProductDAOImpl implements ProductsDAO {
 	currentSession.saveOrUpdate(product);
 	return product;	
 	}
+
+	@Override
+	@Transactional
+	public Product deleteProduct(int id) throws MyGeneralExe{
+    Session currentSession = entityManager.unwrap(Session.class);
+	Product product=currentSession.get(Product.class,id);
+	currentSession.delete(product);
+	return product;	
+	}
+
+	@Override
+	@Transactional
+	public Product getProduct(int id){
+    Session currentSession = entityManager.unwrap(Session.class);
+	Product product=currentSession.get(Product.class,id);
+	
+	if(product==null){
+		throw new MyGeneralExe();
+	}
+	return product;	
+	}
+
+	@Override
+	@Transactional
+	public Product updateProduct(Product product) throws MyGeneralExe{
+
+	Session currentSession = entityManager.unwrap(Session.class);
+	currentSession.saveOrUpdate(product);
+	return product;	
+	}
+
+	
 
 }
 

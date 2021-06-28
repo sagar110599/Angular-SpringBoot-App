@@ -8,5 +8,8 @@ public interface ProductsDAO {
 
 	public List<Product> findAll();
 	public Product addProduct(Product product);
+	public Product deleteProduct(int id);
+	public Product getProduct(int id);
+	public Product updateProduct(Product product);
 		
 }

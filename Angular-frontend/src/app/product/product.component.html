@@ -1,1 +1,24 @@
-<p>product works!</p>
+<div class="row">
+    <div class="col">
+      
+      <div class="row">
+        <div class="col-sm-3" *ngFor="let item of products">
+            <div class="card">
+                <div>
+                  <img [src]="item.product_image" class="card-img-top" alt="" />
+                </div>
+                <div class="card-body">
+                  <h5 class="card-title">{{item.product_name}}</h5>
+                  
+                  <p class="card-text">{{item.product_desc}} .....</p>
+                  <div class="row">
+                    <div class="col-4">Price: {{item.price}}</div>
+                    <div class="col-4">Qty: {{item.quantity}}</div>
+                    
+                  
+                </div>
+              </div>
+        </div>
+      </div>
+    </div> 
+    </div>

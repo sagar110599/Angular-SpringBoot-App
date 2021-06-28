@@ -16,7 +16,7 @@ export class AdminProductComponent implements OnInit {
   .then(response => response.json())
   .then(data => {
   this.products=data;
-  console.log(this.products[0]);
+  console.log(this.products);
 });
   
   
@@ -25,10 +25,22 @@ getSearch(event:any){
   if(event.target.value==""){
     this.ngOnInit();
   }else{
-  this.products=this.products.filter(obj=>(obj.product_name.toLocaleLowerCase()).startsWith((event.target.value).toLocaleLowerCase())||
-  (obj.product_desc.toLocaleLowerCase()).startsWith((event.target.value).toLocaleLowerCase()))
+  this.products=this.products.filter(obj=>(obj.product_name.toLocaleLowerCase()).includes((event.target.value).toLocaleLowerCase())||
+  (obj.product_desc.toLocaleLowerCase()).includes((event.target.value).toLocaleLowerCase()))
   }
   
+}
+delete(id:any){
+  
+  var confirmDelete=confirm("Do you Wish to delete the item");
+  if(confirmDelete){
+  fetch("http://localhost:8080/api/del-products/"+(id.target.value))
+  .then(response => response.json())
+  .then(data => {
+  console.log(data);
+  this.ngOnInit();
+});
+}
 }
 
 }

@@ -9,6 +9,7 @@ import { AdminComponent } from './admin/admin.component';
 import { AdminProductComponent } from './admin/admin-product/admin-product.component';
 import { AddProductComponent } from './admin/add-product/add-product.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { EditProductComponent } from './admin/edit-product/edit-product.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     ErrorComponent,
     AdminComponent,
     AdminProductComponent,
-    AddProductComponent
+    AddProductComponent,
+    EditProductComponent
   ],
   imports: [
     BrowserModule,
