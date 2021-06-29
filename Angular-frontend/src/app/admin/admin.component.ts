@@ -6,12 +6,16 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./admin.component.css']
 })
 export class AdminComponent implements OnInit {
-
+email:string="";
   constructor() { }
 
   ngOnInit(): void {
+    if(sessionStorage.getItem("isLogin")==="true"){
+      window.location.href='./admin/products';
+    }
   }
 checkLogin(uname:string ,password:string){
+  this.email=uname;
   fetch("http://localhost:8080/api/login", {
     method: "POST",
     body: JSON.stringify({'email':uname,'password':password}),
@@ -24,6 +28,8 @@ checkLogin(uname:string ,password:string){
 .then(response => response.json())
 .then(json => {
   if(json['isLogin']==="true"){
+    sessionStorage.setItem("email",this.email);
+    sessionStorage.setItem("isLogin","true");
     window.location.href='./admin/products';
   }else{
     alert("Invalid Credentials");

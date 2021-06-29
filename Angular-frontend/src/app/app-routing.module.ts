@@ -5,16 +5,18 @@ import { AdminProductComponent } from './admin/admin-product/admin-product.compo
 import { AdminComponent } from './admin/admin.component';
 import { EditProductComponent } from './admin/edit-product/edit-product.component';
 import { ErrorComponent } from './error/error.component';
+import { AdminGuard } from './guards/admin.guard';
 import { ProductComponent } from './product/product.component';
+
 
 const routes: Routes = [
   {path: 'products', component: ProductComponent},
-  {path: 'admin', children:[
-  {path: 'products', 
+  {path: 'admin',children:[
+  {path: 'products', canActivate:[AdminGuard],
   component: AdminProductComponent},
-  {path: 'products/:id', 
+  {path: 'products/:id', canActivate:[AdminGuard],
   component: EditProductComponent},
-  {path: 'add-product', 
+  {path: 'add-product', canActivate:[AdminGuard],
   component: AddProductComponent},
   {path:'',
   component:AdminComponent 
