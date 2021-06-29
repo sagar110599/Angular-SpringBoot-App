@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder,Validators } from '@angular/forms';
+import { ProductServiceService } from 'src/app/services/product-service.service';
 
 @Component({
   selector: 'app-add-product',
@@ -10,7 +11,7 @@ export class AddProductComponent implements OnInit {
   productForm:any;
   data:any;
   submit:boolean=false;
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: FormBuilder,private productservice:ProductServiceService) { }
 
   ngOnInit(): void {
     this.productForm = this.formBuilder.group({
@@ -40,19 +41,8 @@ reader.readAsDataURL(file);
   if (this.productForm.invalid) {
       return;
   }else{
-    this.data=this.productForm.value;
-    
-    
-    fetch("http://localhost:8080/api/products", {
-    method: "POST",
-    body: JSON.stringify(this.data),
-    headers: {
-      "Access-Control-Allow-Origin":"*",
-      "Access-Control-Allow-Methods":"DELETE, POST, GET, OPTIONS",
-        "Content-type": "application/json"
-    }
-})
-.then(response => response.json())
+this.data=this.productForm.value;
+this.productservice.addProduct(this.data)
 .then(json => {console.log(json)
 alert("Product Added");
 this.productForm.reset();

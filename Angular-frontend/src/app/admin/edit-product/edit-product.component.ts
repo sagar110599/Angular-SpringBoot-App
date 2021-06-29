@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder,Validators } from '@angular/forms';
 import { ActivatedRoute, Params } from '@angular/router';
 import { Product } from 'src/app/interfaces/product';
+import { ProductServiceService } from 'src/app/services/product-service.service';
 @Component({
   selector: 'app-edit-product',
   templateUrl: './edit-product.component.html',
@@ -12,7 +13,7 @@ export class EditProductComponent implements OnInit {
   product?:Product;
   data:any;
   submit:boolean=false;
-  constructor(private formBuilder: FormBuilder,private route:ActivatedRoute) { }
+  constructor(private formBuilder: FormBuilder,private route:ActivatedRoute,private productservice:ProductServiceService) { }
 
   ngOnInit(): void {
     this.productForm = this.formBuilder.group({
@@ -24,9 +25,9 @@ export class EditProductComponent implements OnInit {
       product_image: [''],
       
     });
-    fetch("http://localhost:8080/api/products/"+this.route.snapshot.params.id)
-    .then(response => response.json())
-    .then(data => {
+    
+  this.productservice.getProduct(this.route.snapshot.params.id)
+  .then(data => {
    this.product=data;
     console.log(this.product);
     this.setFormFields(this.product);
@@ -56,16 +57,7 @@ reader.readAsDataURL(file);
     this.data=this.productForm.value;
     
     
-     fetch("http://localhost:8080/api/updateProducts", {
-    method: "POST",
-    body: JSON.stringify(this.data),
-    headers: {
-      "Access-Control-Allow-Origin":"*",
-      "Access-Control-Allow-Methods":"DELETE, POST, GET, OPTIONS",
-        "Content-type": "application/json"
-    }
-})
-.then(response => response.json())
+this.productservice.updateProduct(this.data)
 .then(json => {console.log(json)
 alert("Product updated");
 this.ngOnInit();

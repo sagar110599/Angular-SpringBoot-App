@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Product } from '../interfaces/product';
+import { ProductServiceService } from '../services/product-service.service';
 
 @Component({
   selector: 'app-product',
@@ -8,10 +9,10 @@ import { Product } from '../interfaces/product';
 })
 export class ProductComponent implements OnInit {
   products:Array<Product>=[]
-  constructor() { }
+  constructor(private productservice:ProductServiceService) { }
 
   ngOnInit(): void {
-    fetch("http://localhost:8080/api/products")
+    this.productservice.getAllProducts()
     .then(response => response.json())
     .then(data => {
     this.products=data;
