@@ -28,7 +28,8 @@
   <div class="form-group">
     <img [src]="product?.product_image" alt="">
     <label for="pic">Product Image</label>
-  <input type="file" class="form-control" formControlName="product_image" (change)="imageSelected($event)" id="pic">
+  <input type="hidden" formControlName="product_image">  
+  <input type="file" class="form-control" (change)="imageSelected($event)" id="pic">
   
   
 </div>

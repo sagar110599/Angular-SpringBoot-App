@@ -18,10 +18,10 @@ export class EditProductComponent implements OnInit {
   ngOnInit(): void {
     this.productForm = this.formBuilder.group({
       id:[''],
-      product_name:  ['', Validators.required],
-      product_desc:  ['', Validators.required],
-      price: ['', Validators.required],
-      quantity: ['', Validators.required],
+      product_name:  [''],
+      product_desc:  [''],
+      price: [''],
+      quantity: [''],
       product_image: [''],
       
     });
@@ -75,6 +75,7 @@ setFormFields(pro:any){
     product_image: pro.product_image,
     
   });
+  
 }
 
 }

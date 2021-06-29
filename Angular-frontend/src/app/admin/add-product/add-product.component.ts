@@ -39,13 +39,14 @@ reader.readAsDataURL(file);
   onSubmit(){
     this.submit=true;
   if (this.productForm.invalid) {
+    alert("All feilds are mandatory");
       return;
   }else{
 this.data=this.productForm.value;
 this.productservice.addProduct(this.data)
 .then(json => {console.log(json)
 alert("Product Added");
-this.productForm.reset();
+this.productForm.disable();
 }); 
   }
 }
