@@ -4,16 +4,16 @@ import { Product } from '../interfaces/product';
   providedIn: 'root'
 })
 export class ProductServiceService {
-  apiurl:string="http://localhost:8080/api/";
+  apiURL:string="http://localhost:8080/api/";
   constructor() { }
 
   getAllProducts(){
-    return fetch(this.apiurl+ "products", {
+    return fetch(this.apiURL+ "products", {
       method: "GET",})
     }
 
   addProduct(formData:any):Promise<Product>{
-    return fetch(this.apiurl+"products", {
+    return fetch(this.apiURL+"products", {
       method: "POST",
       body: JSON.stringify(formData),
       headers: {
@@ -29,15 +29,15 @@ export class ProductServiceService {
     
   });  
 }
-getProduct(id:any):Promise<Product>{
-return fetch(this.apiurl+"products/"+id)
+get(id:any):Promise<Product>{
+return fetch(this.apiURL+"products/"+id)
     .then(response => response.json())
     .then(data => {
    return data;
   });
 }
 updateProduct(formData:any):Promise<Product>{
-  return fetch(this.apiurl+"updateProducts", {
+  return fetch(this.apiURL+"updateProducts", {
     method: "POST",
     body: JSON.stringify(formData),
     headers: {
@@ -53,7 +53,7 @@ updateProduct(formData:any):Promise<Product>{
 }); 
 }
 deleteProduct(id:any):Promise<Product>{
-  return fetch(this.apiurl+"del-products/"+id)
+  return fetch(this.apiURL+"del-products/"+id)
   .then(response => response.json())
   .then(data => {
   return data;
