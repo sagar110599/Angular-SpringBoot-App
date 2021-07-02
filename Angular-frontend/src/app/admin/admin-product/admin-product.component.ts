@@ -10,6 +10,8 @@ export class AdminProductComponent implements OnInit {
   apiurl:string="http://localhost:8080/api/products";
   
   products:Array<Product>=[]
+  p: number = 1;
+  count: number = 4;
   constructor(private productservice:ProductServiceService) { }
 
   ngOnInit(): void {
@@ -41,6 +43,10 @@ delete(id:any){
   this.ngOnInit();
 });
 }
+}
+changePage(event:any){
+  console.log(event);
+  this.p=event;
 }
 
 }

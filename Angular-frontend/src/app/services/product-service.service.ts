@@ -29,7 +29,7 @@ export class ProductServiceService {
     
   });  
 }
-get(id:any):Promise<Product>{
+getProduct(id:any):Promise<Product>{
 return fetch(this.apiURL+"products/"+id)
     .then(response => response.json())
     .then(data => {

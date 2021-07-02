@@ -10,6 +10,7 @@ import { AdminProductComponent } from './admin/admin-product/admin-product.compo
 import { AddProductComponent } from './admin/add-product/add-product.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { EditProductComponent } from './admin/edit-product/edit-product.component';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { EditProductComponent } from './admin/edit-product/edit-product.componen
   imports: [
     BrowserModule,
     AppRoutingModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgxPaginationModule
     
   ],
   providers: [],
