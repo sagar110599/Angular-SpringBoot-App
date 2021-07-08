@@ -6,29 +6,46 @@
     <div class="form-group">
       <label for="pname">Product Name</label>
       <input type="text" class="form-control" id="pname" formControlName="product_name" placeholder="Product Name">
+      <div *ngIf="submit && f.product_name.invalid" class="error">
+        <div *ngIf="f.product_name.errors.required" class="error">Required Field</div>
+      </div>
       
     </div>
     <div class="form-group">
       <label for="desc">Description</label>
-      <input type="text" class="form-control" id="desc" formControlName="product_desc" placeholder="Product Description">
+      <textarea class="form-control" id="desc" formControlName="product_desc" placeholder="Product Description"></textarea>
+      <div *ngIf="submit && f.product_desc.invalid" class="error">
+        <div *ngIf="f.product_desc.errors.required" class="error">Required Field</div>
+      </div>
       
     </div>
     <div class="form-group">
         <label for="pricep">Price</label>
       <input type="number" min="1" class="form-control" formControlName="price" id="pricep">
+      <div *ngIf="submit && f.price.invalid" class="error">
+        <div *ngIf="f.price.errors.required" class="error">Required Field</div>
+        <div *ngIf="f.price.errors.min" class="error"> Min Price should be atleast {{f.price.errors.min.min}}</div>
+      </div>
       
       
     </div>
     <div class="form-group">
       <label for="quant">Quantity Available</label>
-    <input type="number" min="1" class="form-control" formControlName="quantity" id="quant">
+    <input type="number"  class="form-control" formControlName="quantity" id="quant">
+    <div *ngIf="submit && f.quantity.invalid" class="error">
+      <div *ngIf="f.quantity.errors.required">Required Field</div>
+      <div *ngIf="f.quantity.errors.min" class="error"> Min Quantity should be atleast {{f.quantity.errors.min.min}}</div>
+      
+    </div>
     
     
   </div>
   <div class="form-group">
     <label for="pic">Product Image</label>
   <input type="file" class="form-control" formControlName="product_image" (change)="imageSelected($event)" id="pic">
-  
+  <div *ngIf="submit && f.product_image.invalid" class="error">
+    <div *ngIf="f.product_image.errors.required" class="error">Required Field</div>
+  </div>
   
 </div>
     <button type="submit" class="btn btn-primary">Submit</button>

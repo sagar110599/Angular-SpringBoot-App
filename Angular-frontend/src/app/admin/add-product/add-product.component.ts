@@ -9,7 +9,6 @@ import { ProductServiceService } from 'src/app/services/product-service.service'
 })
 export class AddProductComponent implements OnInit {
   productForm:any;
-  data:any;
   submit:boolean=false;
   constructor(private formBuilder: FormBuilder,private productservice:ProductServiceService) { }
 
@@ -17,14 +16,16 @@ export class AddProductComponent implements OnInit {
     this.productForm = this.formBuilder.group({
       product_name:  ['', Validators.required],
       product_desc:  ['', Validators.required],
-      price: ['', Validators.required],
-      quantity: ['', Validators.required],
+      price: ['', [Validators.required,Validators.min(1)]],
+      quantity: ['', [Validators.required,Validators.min(1)]],
       product_image: ['', Validators.required],
       
     });
   }
 
+
 get f() { return this.productForm.controls; }  
+
 
 imageSelected(eventFile:any){
 var file = eventFile.target.files[0];
@@ -35,20 +36,21 @@ reader.onload = (event)=> {
 }
 reader.readAsDataURL(file);
 }
-  
-  onSubmit(){
+
+
+onSubmit(){
     this.submit=true;
   if (this.productForm.invalid) {
-    alert("All feilds are mandatory");
-      return;
+    console.log("Invaid Form");
+  return;
   }else{
-this.data=this.productForm.value;
-this.productservice.addProduct(this.data)
+
+this.productservice.addProduct(this.productForm.value)
 .then(json => {console.log(json)
 alert("Product Added");
-this.productForm.disable();
+
 }); 
-  }
+}
 }
 
 }

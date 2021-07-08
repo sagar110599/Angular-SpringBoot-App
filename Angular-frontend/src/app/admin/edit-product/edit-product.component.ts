@@ -18,10 +18,10 @@ export class EditProductComponent implements OnInit {
   ngOnInit(): void {
     this.productForm = this.formBuilder.group({
       id:[''],
-      product_name:  [''],
-      product_desc:  [''],
-      price: [''],
-      quantity: [''],
+      product_name:  ['', Validators.required],
+      product_desc:  ['', Validators.required],
+      price: ['', [Validators.required,Validators.min(1)]],
+      quantity: ['', [Validators.required,Validators.min(1)]],
       product_image: [''],
       
     });
@@ -29,6 +29,7 @@ export class EditProductComponent implements OnInit {
   this.productservice.getProduct(this.route.snapshot.params.id)
   .then(data => {
    this.product=data;
+   console.log("At start");
     console.log(this.product);
     this.setFormFields(this.product);
   });
@@ -51,13 +52,10 @@ reader.readAsDataURL(file);
   onSubmit(){
     this.submit=true;
   if (this.productForm.invalid) {
-    alert("Invalid Form.Fields Remaining");
+    console.log("Invaid Form Encountered")
       return;
   }else{
-    this.data=this.productForm.value;
-    
-    
-this.productservice.updateProduct(this.data)
+this.productservice.updateProduct(this.productForm.value)
 .then(json => {console.log(json)
 alert("Product updated");
 this.ngOnInit();
