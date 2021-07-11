@@ -45,11 +45,12 @@ onSubmit(){
   return;
   }else{
 
-this.productservice.addProduct(this.productForm.value)
-.then(json => {console.log(json)
-alert("Product Added");
-
-}); 
+this.productservice.post(this.productForm.value).subscribe(
+  response=>{
+    console.log(response);
+    alert("Product Added Sucessfull");
+  }
+) 
 }
 }
 

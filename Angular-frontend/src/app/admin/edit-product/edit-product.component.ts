@@ -26,16 +26,14 @@ export class EditProductComponent implements OnInit {
       
     });
     
-  this.productservice.getProduct(this.route.snapshot.params.id)
-  .then(data => {
-   this.product=data;
-   console.log("At start");
+  this.productservice.get(this.route.snapshot.params.id).subscribe(
+    response=>{
+    this.product=response;
     console.log(this.product);
     this.setFormFields(this.product);
-  });
-      
-    
-  }
+
+    })
+}
 
 get f() { return this.productForm.controls; }  
 
@@ -55,12 +53,14 @@ reader.readAsDataURL(file);
     console.log("Invaid Form Encountered")
       return;
   }else{
-this.productservice.updateProduct(this.productForm.value)
-.then(json => {console.log(json)
-alert("Product updated");
-this.ngOnInit();
-});  
-  }
+this.productservice.update(this.productForm.value).subscribe(
+response=>{
+  console.log(response);
+  alert("Product Updated !!");
+  this.ngOnInit();
+}
+)
+}
 }
 
 setFormFields(pro:any){

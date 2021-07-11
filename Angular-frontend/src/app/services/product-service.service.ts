@@ -1,62 +1,50 @@
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Product } from '../interfaces/product';
+import { catchError, map } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root'
 })
 export class ProductServiceService {
   apiURL:string="http://localhost:8080/api/";
-  constructor() { }
+  
+  constructor(private http:HttpClient) { }
 
-  getAllProducts(){
-    return fetch(this.apiURL+ "products", {
-      method: "GET",})
-    }
+  getAll(){
+    return this.http.get(this.apiURL+"products").pipe
+    (
+      map(response=>JSON.parse(JSON.stringify(response)))
+    )
+  }
 
-  addProduct(formData:any):Promise<Product>{
-    return fetch(this.apiURL+"products", {
-      method: "POST",
-      body: JSON.stringify(formData),
-      headers: {
-        "Access-Control-Allow-Origin":"*",
-        "Access-Control-Allow-Methods":"DELETE, POST, GET, OPTIONS",
-          "Content-type": "application/json"
-      }
-  })
-  .then(response => response.json())
-  .then(data => {
-      
-    return data.details
+  post(formData:any){
+    return this.http.post(this.apiURL+"products",formData).pipe
+    (
+      map(response=>JSON.parse(JSON.stringify(response)))
+    ) 
+}
+
+get(id:any){
+return this.http.get(this.apiURL+"products/"+id).pipe
+(
+  map(response=>JSON.parse(JSON.stringify(response)))
+)
+}
+
+
+update(formData:any){
+  return this.http.post(this.apiURL+"updateProducts",formData).pipe
+  (
+    map(response=>JSON.parse(JSON.stringify(response)))
+  )
     
-  });  
 }
-getProduct(id:any):Promise<Product>{
-return fetch(this.apiURL+"products/"+id)
-    .then(response => response.json())
-    .then(data => {
-   return data;
-  });
-}
-updateProduct(formData:any):Promise<Product>{
-  return fetch(this.apiURL+"updateProducts", {
-    method: "POST",
-    body: JSON.stringify(formData),
-    headers: {
-      "Access-Control-Allow-Origin":"*",
-      "Access-Control-Allow-Methods":"DELETE, POST, GET, OPTIONS",
-        "Content-type": "application/json"
-    }
-})
-.then(response => response.json())
-.then(data => {
-  return data;
 
-}); 
-}
-deleteProduct(id:any):Promise<Product>{
-  return fetch(this.apiURL+"del-products/"+id)
-  .then(response => response.json())
-  .then(data => {
-  return data;
-});
+
+delete(id:any){
+  return this.http.get(this.apiURL+"del-products/"+id).pipe
+  (
+    map(response=>JSON.parse(JSON.stringify(response)))
+  )
 }
 }

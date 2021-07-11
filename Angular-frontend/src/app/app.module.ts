@@ -11,6 +11,7 @@ import { AddProductComponent } from './admin/add-product/add-product.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { EditProductComponent } from './admin/edit-product/edit-product.component';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { NgxPaginationModule } from 'ngx-pagination';
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
-    NgxPaginationModule
+    NgxPaginationModule,
+    HttpClientModule
     
   ],
   providers: [],

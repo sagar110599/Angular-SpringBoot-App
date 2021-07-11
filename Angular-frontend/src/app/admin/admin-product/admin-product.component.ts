@@ -15,34 +15,34 @@ export class AdminProductComponent implements OnInit {
   constructor(private productservice:ProductServiceService) { }
 
   ngOnInit(): void {
-  this.productservice.getAllProducts()
-  .then(res=>res.json())
-  .then(data => {
-  this.products=data;
-  console.log(this.products);
-});
-  
-  
+  this.productservice.getAll().subscribe(response=>{
+    this.products=response;
+  })
 }
-getSearch(event:any){
+  
+  
+
+ getSearch(event:any){
   if(event.target.value==""){
     this.ngOnInit();
   }else{
   this.products=this.products.filter(obj=>(obj.product_name.toLocaleLowerCase()).includes((event.target.value).toLocaleLowerCase())||
   (obj.product_desc.toLocaleLowerCase()).includes((event.target.value).toLocaleLowerCase()))
   }
+} 
   
-}
+
 delete(id:any){
   
   var confirmDelete=confirm("Do you Wish to delete the item");
   if(confirmDelete){
-  this.productservice.deleteProduct(id.target.value)
-  .then(data => {
-  console.log(data);
-  this.ngOnInit();
-});
-}
+  this.productservice.delete(id.target.value).subscribe(
+    response=>{
+      console.log(response);
+      this.ngOnInit();
+    }
+  )
+  }
 }
 changePage(event:any){
   console.log(event);
