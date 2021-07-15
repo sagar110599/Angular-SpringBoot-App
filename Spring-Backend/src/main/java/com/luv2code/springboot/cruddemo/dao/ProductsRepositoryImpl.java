@@ -5,7 +5,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import org.hibernate.Session;
-import com.luv2code.springboot.cruddemo.exception.MyGeneralExe;
+import com.luv2code.springboot.cruddemo.exception.myexceptions.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,21 +13,21 @@ import org.springframework.transaction.annotation.Transactional;
 import com.luv2code.springboot.cruddemo.entity.Product;
 
 @Repository
-public class ProductDAOImpl implements ProductsDAO {
+public class ProductsRepositoryImpl implements ProductsRepository {
 
 	// define field for entitymanager	
 	private EntityManager entityManager;
 		
 	// set up constructor injection
 	@Autowired
-	public ProductDAOImpl(EntityManager theEntityManager) {
+	public ProductsRepositoryImpl(EntityManager theEntityManager) {
 		entityManager = theEntityManager;
 	}
 	
 	
 	@Override
 	@Transactional
-	public List<Product> findAll() throws MyGeneralExe{
+	public List<Product> findAll() throws DataNotFoundException{
 
 		// get the current hibernate session
 		Session currentSession = entityManager.unwrap(Session.class);
@@ -45,7 +45,7 @@ public class ProductDAOImpl implements ProductsDAO {
 
 	@Override
 	@Transactional
-	public Product addProduct(Product product) throws MyGeneralExe{
+	public Product addProduct(Product product) throws DataNotFoundException{
 
 	Session currentSession = entityManager.unwrap(Session.class);
 	currentSession.saveOrUpdate(product);
@@ -54,7 +54,7 @@ public class ProductDAOImpl implements ProductsDAO {
 
 	@Override
 	@Transactional
-	public Product deleteProduct(int id) throws MyGeneralExe{
+	public Product deleteProduct(int id) throws DataNotFoundException{
     Session currentSession = entityManager.unwrap(Session.class);
 	Product product=currentSession.get(Product.class,id);
 	currentSession.delete(product);
@@ -68,14 +68,14 @@ public class ProductDAOImpl implements ProductsDAO {
 	Product product=currentSession.get(Product.class,id);
 	
 	if(product==null){
-		throw new MyGeneralExe();
+		throw new DataNotFoundException("No Product With id "+id);
 	}
 	return product;	
 	}
 
 	@Override
 	@Transactional
-	public Product updateProduct(Product product) throws MyGeneralExe{
+	public Product updateProduct(Product product) throws DataNotFoundException{
 
 	Session currentSession = entityManager.unwrap(Session.class);
 	currentSession.saveOrUpdate(product);

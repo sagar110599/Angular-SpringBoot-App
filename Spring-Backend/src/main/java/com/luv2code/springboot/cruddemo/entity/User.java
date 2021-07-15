@@ -7,8 +7,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import java.util.List;
+import java.util.*;
 import javax.persistence.OneToMany;
+import javax.persistence.*;
+import javax.persistence.ManyToMany;
 import javax.validation.constraints.Pattern;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -32,9 +36,7 @@ public class User {
 	@Column(name="email")
 	private String email;
 
-	@Column(name="contact")
-	@Pattern(regexp="^+91-[0-9]{10}$")
-	private String contact;
+	
 	
 	
 	@OneToMany(mappedBy="user")
@@ -59,15 +61,38 @@ public class User {
 		this.password = password;
 	}
 
-	// define constructors
-	
-	public User() {
-		
+    @ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(	name = "user_role", 
+				joinColumns = @JoinColumn(name = "user_id"), 
+				inverseJoinColumns = @JoinColumn(name = "role_id"))
+	private Set<Role> roles = new HashSet<>();
+
+	public Set<Role> getRoles() {
+		return this.roles;
 	}
 
-	public User(String firstName, String lastName, String email) {
-		this.firstName = firstName;
-		this.lastName = lastName;
+	public void setRoles(Set<Role> roles) {
+		this.roles = roles;
+	}
+    
+	@Column(name="username")
+	String username;
+
+	public String getUsername() {
+		return this.username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	// define constructors
+	
+	public User() {}
+
+	public User(String username, String email,String password) {
+		this.username=username;
+		this.password=password;
 		this.email = email;
 	}
 
@@ -106,17 +131,11 @@ public class User {
 	}
 
 	// define tostring
-	public String getContact(){
-		return contact;
-	}
-
-	public void setContact(String contact){
-		this.contact=contact;
-	}
+	
 
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + ", contact="+contact+" ]";
+		return "User [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + " ]";
 	}
 		
 }

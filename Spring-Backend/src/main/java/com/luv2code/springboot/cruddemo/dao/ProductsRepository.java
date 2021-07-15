@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.luv2code.springboot.cruddemo.entity.Product;
 
-public interface ProductsDAO {
+public interface ProductsRepository {
 
 	public List<Product> findAll();
 	public Product addProduct(Product product);

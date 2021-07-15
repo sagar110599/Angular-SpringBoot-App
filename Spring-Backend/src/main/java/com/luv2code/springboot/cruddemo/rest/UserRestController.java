@@ -1,60 +1,122 @@
 package com.luv2code.springboot.cruddemo.rest;
 
+import java.util.HashSet;
 import java.util.List;
-import java.util.HashMap;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.PostMapping;
-import com.luv2code.springboot.cruddemo.dao.UserDAO;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestBody;
+import com.luv2code.springboot.cruddemo.exception.myexceptions.*;
+import com.luv2code.springboot.cruddemo.entity.ERole;
+import com.luv2code.springboot.cruddemo.entity.Role;
 import com.luv2code.springboot.cruddemo.entity.User;
+import com.luv2code.springboot.cruddemo.dao.RoleRepository;
+import com.luv2code.springboot.cruddemo.dao.UserRepository;
+import com.luv2code.springboot.cruddemo.security.jwt.JwtUtils;
+import com.luv2code.springboot.cruddemo.dao.UserDetailsImpl;
 
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/auth")
 public class UserRestController {
-
-	private UserDAO UserDAO;
-	
 	@Autowired
-	public UserRestController(UserDAO theUserDAO) {
-		UserDAO = theUserDAO;
-	}
-	
-	// expose "/Users" and return list of Users
-	@GetMapping("/users")
-	public List<User> findAll() {
-		return UserDAO.findAll();
-	}
-    
-	@CrossOrigin(origins = "*")
-	@PostMapping("/login")
-	public HashMap<String,String> checkLogin(@RequestBody HashMap body) {
+	AuthenticationManager authenticationManager;
 
-		HashMap<String,String> result=new HashMap<>();
-		String email=(String) body.get("email");
-		String password=(String) body.get("password");
-        if(UserDAO.checkLogin(email,password)){
-        result.put("isLogin","true");
-		}else{
-			result.put("isLogin","false");
+	@Autowired
+	UserRepository userRepository;
+
+	@Autowired
+	RoleRepository roleRepository;
+
+	@Autowired
+	PasswordEncoder encoder;
+
+	@Autowired
+	JwtUtils jwtUtils;
+
+	@PostMapping("/signin")
+	public JwtResponse authenticateUser(@RequestBody User user)  {
+        
+		Authentication authentication = authenticationManager.authenticate(
+				new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
+
+		SecurityContextHolder.getContext().setAuthentication(authentication);
+		String jwt = jwtUtils.generateJwtToken(authentication);
+		
+		UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();		
+		List<String> roles = userDetails.getAuthorities().stream()
+				.map(item -> item.getAuthority())
+				.collect(Collectors.toList());
+
+		return new JwtResponse(jwt, 
+								userDetails.getId(), 
+								userDetails.getUsername(), 
+								userDetails.getEmail(), 
+								roles);
+	}
+
+	@PostMapping("/signup")
+	public User registerUser( @RequestBody SignupRequest signUpRequest) {
+		System.out.println(signUpRequest);
+		if (userRepository.existsByUsername(signUpRequest.getUsername())) {
+			throw new RegisterException("Username Already Exist");
 		}
-		
-		
-		return result;
+
+		if (userRepository.existsByEmail(signUpRequest.getEmail())) {
+			throw new RegisterException("Email Already Exist");
+		}
+
+		// Create new user's account
+		User user = new User(signUpRequest.getUsername(), 
+							 signUpRequest.getEmail(),
+							 encoder.encode(signUpRequest.getPassword()));
+
+		Set<String> strRoles = signUpRequest.getRole();
+		Set<Role> roles = new HashSet<>();
+
+		if (strRoles == null) {
+			Role userRole = roleRepository.findByName(ERole.ROLE_USER)
+					.orElseThrow(() ->  new RegisterException("No such Role Exist"));
+			roles.add(userRole);
+		} else {
+			strRoles.forEach(role -> {
+				switch (role) {
+				case "admin":
+					Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
+							.orElseThrow(() -> new RegisterException("No such Role Exist"));
+					roles.add(adminRole);
+
+					break;
+				case "mod":
+					Role modRole = roleRepository.findByName(ERole.ROLE_MODERATOR)
+							.orElseThrow(() -> new RegisterException("No such Role Exist"));
+					roles.add(modRole);
+
+					break;
+				default:
+					Role userRole = roleRepository.findByName(ERole.ROLE_USER)
+							.orElseThrow(() -> new RegisterException("No such Role Exist"));
+					roles.add(userRole);
+				}
+			});
+		}
+
+		user.setRoles(roles);
+		userRepository.save(user);
+
+		return user;
 	}
-
-	
 }
-
-
-
-
-
-
-
-
-
-
