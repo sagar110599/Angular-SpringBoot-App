@@ -6,10 +6,12 @@ import { AdminComponent } from './admin/admin.component';
 import { EditProductComponent } from './admin/edit-product/edit-product.component';
 import { ErrorComponent } from './error/error.component';
 import { AdminGuard } from './guards/admin.guard';
+import { LoginComponent } from './login/login.component';
 import { ProductComponent } from './product/product.component';
 
 
 const routes: Routes = [
+  {path:'login',component:LoginComponent},
   {path: 'products', component: ProductComponent},
   {path: 'admin',children:[
   {path: 'products', canActivate:[AdminGuard],

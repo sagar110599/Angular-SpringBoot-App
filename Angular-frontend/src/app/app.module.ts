@@ -12,6 +12,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { EditProductComponent } from './admin/edit-product/edit-product.component';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { HttpClientModule } from '@angular/common/http';
+import { LoginComponent } from './login/login.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { HttpClientModule } from '@angular/common/http';
     AdminComponent,
     AdminProductComponent,
     AddProductComponent,
-    EditProductComponent
+    EditProductComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
