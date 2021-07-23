@@ -1,7 +1,7 @@
 package com.luv2code.springboot.cruddemo.security.jwt;
 
 import java.util.Date;
-
+import java.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,9 +24,12 @@ public class JwtUtils {
 	public String generateJwtToken(Authentication authentication) {
 
 		UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
+		Claims claims = Jwts.claims().setSubject(userPrincipal.getUsername());
+        claims.put("userId", userPrincipal.getId() + "");
+        claims.put("role", userPrincipal.getAuthorities());
 
 		return Jwts.builder()
-				.setSubject((userPrincipal.getUsername()))
+				.setClaims(claims)
 				.setIssuedAt(new Date())
 				.setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
 				.signWith(SignatureAlgorithm.HS512, jwtSecret)
@@ -34,12 +37,14 @@ public class JwtUtils {
 	}
 
 	public String getUserNameFromJwtToken(String token) {
+		
 		return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getSubject();
 	}
 
 	public boolean validateJwtToken(String authToken) {
 		try {
-			Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
+			Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken).getBody().getSubject();
+			
 			return true;
 		} catch (SignatureException e) {
 			logger.error("Invalid JWT signature: {}", e.getMessage());

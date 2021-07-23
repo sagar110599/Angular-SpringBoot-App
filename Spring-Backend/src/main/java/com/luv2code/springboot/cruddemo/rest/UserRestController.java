@@ -27,6 +27,7 @@ import com.luv2code.springboot.cruddemo.dao.RoleRepository;
 import com.luv2code.springboot.cruddemo.dao.UserRepository;
 import com.luv2code.springboot.cruddemo.security.jwt.JwtUtils;
 import com.luv2code.springboot.cruddemo.dao.UserDetailsImpl;
+import com.luv2code.springboot.cruddemo.rest.request.*;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController

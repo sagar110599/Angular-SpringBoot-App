@@ -20,6 +20,7 @@
     "@angular/platform-browser-dynamic": "~11.2.11",
     "@angular/router": "~11.2.11",
     "datatables.net": "^1.10.25",
+    "jwt-decode": "^3.1.2",
     "ngx-pagination": "^5.1.1",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",

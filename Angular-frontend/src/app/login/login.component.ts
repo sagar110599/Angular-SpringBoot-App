@@ -18,7 +18,7 @@ export class LoginComponent implements OnInit {
   
 
   constructor(private authservice:AuthService) {
-
+this.authservice.checkisAdmin();
   }
   loginForm = new FormGroup({
     username: new FormControl(''),
@@ -47,6 +47,7 @@ this.authservice.register(this.registerForm.value).subscribe(
 
   response=>{
     console.log(response);
+    alert("Registered Succesfully");
   },
     error=>{
       console.log(error);
@@ -67,6 +68,7 @@ login(){
     response=>{
       console.log(response);
       alert("Successful Login");
+      localStorage.setItem('accessToken',response.accessToken);
     },
     error=>{
       if(error instanceof UnAuthError){

@@ -47,11 +47,19 @@ public class Order {
 		this.user = user;
 	}
 
+	@Column(name="flag")
+	private boolean flag;
 
-	
+	public boolean isFlag() {
+		return this.flag;
+	}
+
+	public void setFlag(boolean flag) {
+		this.flag = flag;
+	}
 
 
-   
+
    @ManyToMany()  
    @JoinTable(name = "orders_product",   
             joinColumns = { @JoinColumn(name = "oid") },   
