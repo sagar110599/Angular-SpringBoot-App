@@ -6,11 +6,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.*;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.ManyToMany;
 import javax.persistence.JoinTable;
-import java.util.List;
+import java.util.*;
 import com.luv2code.springboot.cruddemo.entity.Product;
 import javax.validation.constraints.Pattern;
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -21,11 +22,12 @@ public class Order {
 
 	// define fields
 	
+	
+	private int id;
+    
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="id")
-	private int id;
-
+	@Column(name="oid")
 	public int getId() {
 		return this.id;
 	}
@@ -34,11 +36,12 @@ public class Order {
 		this.id = id;
 	}
    
-   @JsonBackReference
+   
+   private User user;
+    
+	@JsonBackReference
    @ManyToOne
    @JoinColumn(name="cid")
-   private User user;
-
 	public User getUser() {
 		return this.user;
 	}
@@ -60,18 +63,19 @@ public class Order {
 
 
 
-   @ManyToMany()  
-   @JoinTable(name = "orders_product",   
-            joinColumns = { @JoinColumn(name = "oid") },   
-            inverseJoinColumns = { @JoinColumn(name = "pid") }) 
-	private List<Product> products;	
-
-	public List<Product> getProducts	() {
-		return this.products	;
+    
+    
+   
+   
+   private Set<OrderItem>order_product;	
+    @JsonManagedReference
+	@OneToMany(fetch = FetchType.EAGER,mappedBy="order",cascade = CascadeType.ALL)
+	public Set<OrderItem> getOrder_product() {
+		return this.order_product;
 	}
 
-	public void setProducts	(List<Product> products	) {
-		this.products	 = products	;
+	public void setOrder_product(Set<OrderItem> order_product) {
+		this.order_product = order_product;
 	}
 	
 

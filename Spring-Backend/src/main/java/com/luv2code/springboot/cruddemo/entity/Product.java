@@ -4,11 +4,11 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.persistence.Table;
 import javax.persistence.ManyToMany;
 import javax.persistence.JoinColumn;
-import java.util.List;
+import java.util.*;
 import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.Pattern;
@@ -20,11 +20,11 @@ public class Product {
 
 	// define fields
 	
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="id")
+	
 	private int id;
-
+    @Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name="pid")
 	public int getId() {
 		return this.id;
 	}
@@ -85,19 +85,17 @@ public class Product {
 	}
 
 	
-	@JsonBackReference 
-	@ManyToMany()  
-    @JoinTable(name = "orders_product",   
-            joinColumns = { @JoinColumn(name = "pid") },   
-            inverseJoinColumns = { @JoinColumn(name = "oid") })  
-	private List<Order> orders;
-
-	public List<Order> getOrders() {
-		return this.orders;
+	
+	
+	private Set<OrderItem> order_product;
+    @JsonBackReference
+	@OneToMany(fetch = FetchType.EAGER,mappedBy="product",cascade = CascadeType.ALL)   
+	public Set<OrderItem> getOrder_product() {
+		return this.order_product;
 	}
 
-	public void setOrders(List<Order> orders) {
-		this.orders = orders;
+	public void setOrder_product(Set<OrderItem> order_product) {
+		this.order_product = order_product;
 	}
 	
 	@Column(name="product_image")

@@ -1,0 +1,28 @@
+<div class="card">
+    <div>
+      <img [src]="product.product_image" class="card-img-top" alt="" />
+    </div>
+    <div class="card-body">
+      <h5 class="card-title">{{product.product_name}}</h5>
+      
+      <p class="card-text">{{product.product_desc}}</p>
+    <div class="row">
+        <div class="col-8">Price: {{product.price}}</div>
+    </div>
+    <br>
+    <div *ngIf="product.quantity>0 then available else notavailable"></div>
+    <ng-template #available>
+      <div class="row">
+          <div class="col-12"><button  *ngIf="!present" class="btn btn-primary" (click)="addToCart(product)">Add to Cart</button>
+            <button  *ngIf="present" class="btn btn-success">Already In Cart</button></div>
+      </div>
+      </ng-template>
+
+    <ng-template #notavailable>
+    <div class="row">
+        <div class="col-12"><button class="btn btn-danger">Out of Stock</button></div>
+    </div>
+    </ng-template>
+    
+  </div>
+</div>

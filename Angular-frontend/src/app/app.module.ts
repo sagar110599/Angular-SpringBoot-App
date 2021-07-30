@@ -13,6 +13,9 @@ import { EditProductComponent } from './admin/edit-product/edit-product.componen
 import { NgxPaginationModule } from 'ngx-pagination';
 import { HttpClientModule } from '@angular/common/http';
 import { LoginComponent } from './login/login.component';
+import { ProductCardComponent } from './product-card/product-card.component';
+import { NavbarComponent } from './navbar/navbar.component';
+
 
 @NgModule({
   declarations: [
@@ -23,7 +26,10 @@ import { LoginComponent } from './login/login.component';
     AdminProductComponent,
     AddProductComponent,
     EditProductComponent,
-    LoginComponent
+    LoginComponent,
+    ProductCardComponent,
+    NavbarComponent,
+    
   ],
   imports: [
     BrowserModule,

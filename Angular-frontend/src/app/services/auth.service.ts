@@ -6,6 +6,7 @@ import { UnAuthError } from '../error/un-auth-error';
 import { BadInputError } from '../error/bad-input-error';
 import { NotFoundError } from '../error/not-found-error';
 import { catchError, map } from 'rxjs/operators';
+import { TokenObject} from '../interfaces/TokenObject';
 import jwt_decode from "jwt-decode";
 
 @Injectable({
@@ -49,7 +50,6 @@ checkLogin(){
 checkisAdmin(){
   if(this.checkLogin()){
     var data=this.getTokenObject();
-   console.log(data);
    if(data.role.findIndex(value=> value.authority==="ROLE_ADMIN")>-1){
     return true;
    }
@@ -61,16 +61,17 @@ checkisAdmin(){
 getTokenObject(){
 return <TokenObject>jwt_decode(localStorage.getItem('accessToken') || '');
 }
+getUser(){
+  let tokenobj=this.getTokenObject();
+  let data={
+  id:parseInt(tokenobj.userId),
+  username:tokenobj.sub
+  
 }
-interface TokenObject{
-  sub:string;
-  userId:string;
-  role:Array<Authorities>;
-  iat:bigint;
-  exp:bigint;
+  return data;
 }
-interface Authorities{
-  authority:string;
+
 }
+
 
 
