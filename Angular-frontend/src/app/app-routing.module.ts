@@ -7,12 +7,14 @@ import { EditProductComponent } from './admin/edit-product/edit-product.componen
 import { ErrorComponent } from './error/error.component';
 import { AdminGuard } from './guards/admin.guard';
 import { LoginComponent } from './login/login.component';
+import { MyCartComponent } from './my-cart/my-cart.component';
 import { ProductComponent } from './product/product.component';
 
 
 const routes: Routes = [
   {path:'login',component:LoginComponent},
   {path: 'products', component: ProductComponent},
+  {path: 'cart', component: MyCartComponent},
   {path: 'admin',children:[
   {path: 'products', canActivate:[AdminGuard],
   component: AdminProductComponent},

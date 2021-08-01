@@ -17,7 +17,7 @@ import javax.validation.constraints.Pattern;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 @Entity
-@Table(name="orders_product")
+@Table(name="Orders_product")
 
 public class OrderItem {
 
@@ -39,7 +39,7 @@ public int getId() {
 private Product product;
     
 	
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
 	@JoinColumn(name = "pid") 
 	public Product getProduct() {
 		return this.product;
@@ -53,7 +53,7 @@ private Product product;
 
 private Order order;
     @JsonBackReference
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	@JoinColumn(name = "oid") 
     public Order getOrder() {
 		return this.order;

@@ -11,5 +11,6 @@ public interface OrderRepository {
 	public Order deleteOrder(int id);
 	public Order getOrder(int userId);
 	public Order updateOrder(Order order);
+	public Order deleteProductFromOrder(int oid,int pid);
 		
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AppError } from '../error/app-error';
-import { Observable, throwError } from 'rxjs';
+import { Observable, Subject, throwError } from 'rxjs';
 import { UnAuthError } from '../error/un-auth-error';
 import { BadInputError } from '../error/bad-input-error';
 import { NotFoundError } from '../error/not-found-error';
@@ -16,50 +16,82 @@ import { analyzeAndValidateNgModules } from '@angular/compiler';
 })
 export class CartService {
   apiURL:string="http://localhost:8080/api/";
-  
-  constructor(private http:HttpClient,private authservice:AuthService) { }
+  public cart: Subject<ShoppingCart> = new Subject();
+  constructor(private http:HttpClient,private authservice:AuthService) { 
+this.initializeCart();
+
+  }
 
   
+   async initializeCart(){
+   let temp=await this.getCart();
+   //console.log("initalized");
+   this.cart.next(temp); 
 
+  }
 
-getCart():Promise<ShoppingCart>{
+  public getShoppingCart(){
+    return this.cart;
+  }
+
+  public async updateShoppingCart(cart:ShoppingCart){
+    let temp=await this.updateCart(cart);
+    this.cart.next(temp);
+  }
+  public async deleteProductFromCart(product:Product,cartId:any){
+    let temp=await this.deleteProduct(product,cartId);
+    this.cart.next(temp);
+  }
+
+private deleteProduct(product:Product,cartId:any):Promise<any>{
+  return this.http.get(this.apiURL+"del-product-order/"+cartId+"/"+product.id,{
+    headers:myheader()
+  }).toPromise().then
+  (
+    response=>{
+      let data=JSON.parse(JSON.stringify(response));
+      
+      return new ShoppingCart(data.id,this.authservice.getUser(),data.order_product) ;
+    })
+    .catch(error=>{
+      this.handleError(error);
+    }
+    )
+  }
+
+private getCart():Promise<any>{
 return this.http.get(this.apiURL+"orders/"+this.authservice.getTokenObject().userId,{
   headers:myheader()
 }).toPromise().then
 (
   response=>{
     let data=JSON.parse(JSON.stringify(response));
-    data.user=this.authservice.getUser();
-    return data;
+    
+    return new ShoppingCart(data.id,this.authservice.getUser(),data.order_product) ;
+  })
+  .catch(error=>{
+    this.handleError(error);
   }
-  
-)
-}
-deleteCart(id:any){
-  return this.http.get(this.apiURL+"del-orders/"+id,{
-    headers:myheader()
-  }).pipe
-  (
-    map(response=>JSON.parse(JSON.stringify(response))),
-    catchError(this.handleError)
   )
 }
 
-
-async addToCart(product:Product){
-  var cart:ShoppingCart;
-  cart =await this.getCart();
-      if(this.check(cart,product))
-        return this.incrementCartProductQuantity(cart,product);
-      else
-        return this.addNewProductToCart(cart,product);
+private updateCart(cart:ShoppingCart):Promise<any>{
+  
+  return this.http.post(this.apiURL+"updateOrders",cart,{
+    headers:myheader()
+  }).toPromise()
+  .then
+  (
+    response=>{
+      let data=JSON.parse(JSON.stringify(response));
+      
+      return new ShoppingCart(data.id,this.authservice.getUser(),data.order_product);
+    }
+  )
+  .catch(error=>{
+    this.handleError(error);
+  })
 }
-
-
-
-
-
-
 
 handleError(error:Response){
   if(error.status==400)
@@ -73,56 +105,6 @@ handleError(error:Response){
 
 
 
-
-private updateCart(cart:ShoppingCart):Observable<ShoppingCart>{
-  
-  return this.http.post(this.apiURL+"updateOrders",cart,{
-    headers:myheader()
-  }).pipe
-  (
-    map(response=>{
-      let data=JSON.parse(JSON.stringify(response));
-      data.user=this.authservice.getUser();
-      return data;
-    }),
-    catchError(this.handleError)
-  )
-    
-}
-
-
-private check(cart:ShoppingCart,product:Product){
-  return cart.order_product.some(function(el) {
-    return el.product.id === product.id;
-  });
-}
-private  incrementCartProductQuantity(cart:ShoppingCart,product:Product){
-  var index=cart.order_product.findIndex(item=>item.product.id===product.id);
-  cart.order_product[index].quantity=cart.order_product[index].quantity.valueOf()+1;
-  return this.updateCart(cart);
-}
-
-private decrementCartProductQuantity(cart:ShoppingCart,product:Product){
-  var index=cart.order_product.findIndex(item=>item.product.id===product.id);
-  cart.order_product[index].quantity=cart.order_product[index].quantity.valueOf()-1;
-  return this.updateCart(cart);
-
-} 
-private addNewProductToCart(cart:any,product:Product){
-  
-  cart.order_product.push({
-      id:0,
-      product:product,
-      quantity:1
-  })
-  return this.updateCart(cart);
-
-}  
-private deleteFromCart(cart:ShoppingCart,product:Product){
-  cart.order_product.pop();
-  return this.updateCart(cart);
-
-}
 
 
 }

@@ -8,11 +8,13 @@ import { ShoppingCart } from '../interfaces/ShoppingCart';
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent implements OnInit {
-  cart$: Promise<ShoppingCart>;
+  totalItems:any=0;
   constructor(private cartservice:CartService) { }
 
   ngOnInit(): void {
-    this.cart$=this.cartservice.getCart();
+    this.cartservice.getShoppingCart().subscribe(value=>{
+      this.totalItems=value.getTotalProducts();
+    })
     
 
   }

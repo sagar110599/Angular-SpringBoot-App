@@ -15,6 +15,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { LoginComponent } from './login/login.component';
 import { ProductCardComponent } from './product-card/product-card.component';
 import { NavbarComponent } from './navbar/navbar.component';
+import { MyCartComponent } from './my-cart/my-cart.component';
 
 
 @NgModule({
@@ -29,6 +30,7 @@ import { NavbarComponent } from './navbar/navbar.component';
     LoginComponent,
     ProductCardComponent,
     NavbarComponent,
+    MyCartComponent,
     
   ],
   imports: [

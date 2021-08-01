@@ -64,6 +64,15 @@ public class OrderRestController {
     
 	return orderRepository.updateOrder(order);
 	}
+    @CrossOrigin(origins = "*")
+	@GetMapping("/del-product-order/{oid}/{pid}")
+	@PreAuthorize("hasRole('USER')")
+	public Order deleteProduct(@PathVariable int oid,@PathVariable int pid){
+		
+    
+	return orderRepository.deleteProductFromOrder(oid,pid);
+	}
+
 	
 }
 

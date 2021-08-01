@@ -14,7 +14,7 @@
     <ng-template #available>
       <div class="row">
           <div class="col-12"><button  *ngIf="!present" class="btn btn-primary" (click)="addToCart(product)">Add to Cart</button>
-            <button  *ngIf="present" class="btn btn-success">Already In Cart</button></div>
+            <button  *ngIf="present" class="btn btn-success" (click)="removeFromCart(product)">Remove From Cart</button></div>
       </div>
       </ng-template>
 

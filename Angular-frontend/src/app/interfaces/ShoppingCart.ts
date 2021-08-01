@@ -16,38 +16,51 @@ export class ShoppingCart{
     constructor(id:Number,user:User,order_product:Array<CartItem>){
 this.id=id;
 this.user=user;
-this.order_product=order_product;
+this.order_product=order_product.sort((a,b)=>a.id  <  b.id?-1:1);
     }
 
     addProduct(product:Product){
-     var index=this.order_product.findIndex(item=>item.product.id===product.id);
-     if(index>-1){
-        this.incrementCartProductQuantity(product,index)
-     }else{
-         this.addNewProductToCart(product);
-     }
-    }
-    private  incrementCartProductQuantity(product:Product,index:any){
-        
-        this.order_product[index].quantity=this.order_product[index].quantity.valueOf()+1;
-        
-      }
-      
-      private decrementCartProductQuantity(product:Product,index:any){
-        
-        this.order_product[index].quantity=this.order_product[index].quantity.valueOf()-1;
-      
-      } 
-      private addNewProductToCart(product:Product){
-        
         this.order_product.push({
             id:0,
             product:product,
             quantity:1
         })
+    }
+    incrementCartProductQuantity(product:Product){
+        var index=this.getProductIndex(product);
+        this.order_product[index].quantity=this.order_product[index].quantity.valueOf()+1;
         
+      }
+      
+    decrementCartProductQuantity(product:Product){
+        var index=this.getProductIndex(product);
+        this.order_product[index].quantity=this.order_product[index].quantity.valueOf()-1;
       
       } 
+     
+      
+       removeProductFromCart(product:Product){
+        var index=this.getProductIndex(product);
+        if(index>-1){
+            this.order_product.splice(index,1);
+        }
+      }
+
+      getTotalCost(){
+          var cost=this.order_product.reduce((total, item)=> { return total + item.quantity.valueOf()*item.product.price.valueOf() }, 0);
+          return cost;
+      }
+      getTotalProducts(){
+          var total=this.order_product.reduce((count, item)=> { return count + item.quantity.valueOf() }, 0);
+          return total;
+      }
+      getTotalUniqueProducts(){
+          return this.order_product.length;
+      }
+      private getProductIndex(product:Product){
+        return this.order_product.findIndex(item=>item.product.id===product.id);
+    }
+   
 
 }
 

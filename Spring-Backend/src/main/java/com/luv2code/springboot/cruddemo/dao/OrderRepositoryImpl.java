@@ -4,6 +4,7 @@ import java.util.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+
 import org.hibernate.Session;
 import org.hibernate.*;
 import com.luv2code.springboot.cruddemo.exception.myexceptions.*;
@@ -99,6 +100,23 @@ public class OrderRepositoryImpl implements OrderRepository {
 
 	Session currentSession = entityManager.unwrap(Session.class);
 	currentSession.saveOrUpdate(order);
+	return order;	
+	}
+
+	@Override
+	@Transactional
+	public Order deleteProductFromOrder(int oid,int pid) throws DataNotFoundException{
+
+	Session currentSession = entityManager.unwrap(Session.class);
+	
+	
+		javax.persistence.Query query = entityManager.createQuery("delete from OrderItem o where o.order.id= :oid AND o.product.id= :pid");
+			
+		query.setParameter("oid", oid);
+		query.setParameter("pid", pid);
+		int result =query.executeUpdate();
+		
+	Order order=currentSession.get(Order.class,oid);
 	return order;	
 	}
 

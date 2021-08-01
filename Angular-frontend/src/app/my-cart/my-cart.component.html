@@ -1,0 +1,64 @@
+<h1>Shopping Cart</h1>
+<div class="card" *ngIf="shoppingCart.order_product.length" style="width: 100%;">
+  <div class="card-body">
+    <p>
+      You have {{ shoppingCart.order_product.length }} items in your shopping cart.
+      <button *ngIf="shoppingCart.order_product.length"  class="float-right btn btn-light btn-sm">Clear Shopping Cart</button>
+
+    </p>
+  </div>
+  <table class="table">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Product</th>
+        <th class="text-center" style="width: 230px">Quantity</th>
+        <th class="text-right" style="width: 200px">Price</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of shoppingCart.order_product">
+        <td>
+          <div [style.backgroundImage]="'url(' + item.product.product_image + ')'" class="thumbnail">
+          </div>
+        </td>
+        <td>
+          {{ item.product.product_name }}
+        </td>
+        <td>
+            <div class="row no-gutters">
+                <div class="col-2">
+                  <button 
+                    (click)="decrementQuantity(item)"
+                    class="btn btn-secondary btn-block">-</button> 
+                </div>
+                <div class="col text-center quantity">
+                  {{ item.quantity }} in cart
+                </div>
+                <div class="col-2">
+                  <button 
+                  (click)="incrementQuantity(item)"
+                    class="btn btn-secondary btn-block">+</button> 
+                </div>
+              </div>
+        </td>
+        <td class="text-right">
+          {{ item.product.price }}
+        </td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <th>Total</th>
+        <th></th>
+        <th></th>
+        <th class="text-right">{{shoppingCart.getTotalCost()}}</th>
+      </tr>
+      <tr>
+        <th colspan="4">
+          <a *ngIf="shoppingCart.order_product.length" routerLink="/check-out" class="btn btn-primary">Check Out</a>
+        </th>
+      </tr>
+    </tfoot>
+  </table>
+</div>
