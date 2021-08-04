@@ -1,4 +1,4 @@
-import { Component, OnInit,Input  } from '@angular/core';
+import { Component, OnInit,Input,OnChanges,SimpleChanges } from '@angular/core';
 //import { checkServerIdentity } from 'tls';
 import { ShoppingCart } from '../interfaces/ShoppingCart';
 import { Product } from '../interfaces/product';
@@ -14,15 +14,15 @@ import { CartService } from '../services/cart.service';
 export class ProductCardComponent implements OnInit {
   @Input() product:Product;
   @Input() cart:ShoppingCart;
-  mycart:Observable<ShoppingCart>;
-  count:any=0;
+  
   present:boolean=false;
   constructor(private cartservice:CartService) { 
     
   }
 
   ngOnInit(): void {
-      if(this.cart.order_product.findIndex(p=>p.product.id===this.product.id)>-1){
+    
+      if(this.cart.getProductIndex(this.product)>-1){
     this.present=true;
     }else{
       this.present=false;
@@ -36,6 +36,7 @@ export class ProductCardComponent implements OnInit {
     await this.cartservice.updateShoppingCart(this.cart);
     console.log("After Update");
     console.log(this.cart);
+    this.ngOnInit();
      
    }
    async removeFromCart(product:Product){
@@ -43,7 +44,9 @@ export class ProductCardComponent implements OnInit {
      await this.cartservice.deleteProductFromCart(product,this.cart.id);
      console.log("After Delete");
     console.log(this.cart);
+    this.ngOnInit();
    }
    
+  
   
 }

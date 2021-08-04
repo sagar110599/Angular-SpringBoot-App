@@ -16,6 +16,7 @@ import { LoginComponent } from './login/login.component';
 import { ProductCardComponent } from './product-card/product-card.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { MyCartComponent } from './my-cart/my-cart.component';
+import { CheckOutComponent } from './check-out/check-out.component';
 
 
 @NgModule({
@@ -31,6 +32,7 @@ import { MyCartComponent } from './my-cart/my-cart.component';
     ProductCardComponent,
     NavbarComponent,
     MyCartComponent,
+    CheckOutComponent,
     
   ],
   imports: [

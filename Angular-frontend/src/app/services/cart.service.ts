@@ -10,7 +10,7 @@ import { HttpClient } from '@angular/common/http';
 import { AuthService } from './auth.service';
 import { ShoppingCart } from '../interfaces/ShoppingCart';
 import {Product } from '../interfaces/product';
-import { analyzeAndValidateNgModules } from '@angular/compiler';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -59,7 +59,7 @@ private deleteProduct(product:Product,cartId:any):Promise<any>{
     )
   }
 
-private getCart():Promise<any>{
+ getCart():Promise<any>{
 return this.http.get(this.apiURL+"orders/"+this.authservice.getTokenObject().userId,{
   headers:myheader()
 }).toPromise().then

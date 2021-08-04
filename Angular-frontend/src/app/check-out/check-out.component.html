@@ -2,7 +2,7 @@
 <div class="card" *ngIf="shoppingCart.order_product.length" style="width: 100%;">
   <div class="card-body">
     <p>
-      You have {{ shoppingCart.order_product.length }} items in your shopping cart.
+     Your Order has {{ shoppingCart.order_product.length }} items .
       
 
     </p>
@@ -26,21 +26,12 @@
           {{ item.product.product_name }}
         </td>
         <td>
-            <div class="row no-gutters">
-                <div class="col-2">
-                  <button 
-                    (click)="decrementQuantity(item)"
-                    class="btn btn-secondary btn-block">-</button> 
-                </div>
+            
                 <div class="col text-center quantity">
-                  {{ item.quantity }} in cart
+                  {{ item.quantity }} Units Purchased.
                 </div>
-                <div class="col-2">
-                  <button 
-                  (click)="incrementQuantity(item)"
-                    class="btn btn-secondary btn-block">+</button> 
-                </div>
-              </div>
+                
+              
         </td>
         <td class="text-right">
           {{ item.product.price }}
@@ -55,10 +46,18 @@
         <th class="text-right">{{shoppingCart.getTotalCost()}}</th>
       </tr>
       <tr>
-        <th colspan="4">
-          <a *ngIf="shoppingCart.order_product.length" [routerLink]="['/checkout']" class="btn btn-primary">Check Out</a>
-        </th>
+        <!-- <table class="table">
+        <thead>
+            <tr>
+            <th>Order Details</th>
+            <th></th>
+            </tr>
+
+        </thead>
+        </table> -->
+        
       </tr>
     </tfoot>
   </table>
+  <button class="btn btn-success" (click)="openRazorPay()">Pay Here</button>
 </div>

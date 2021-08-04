@@ -15,7 +15,7 @@ export class ProductComponent implements OnInit , OnDestroy {
   products:Array<Product>=[]
   shoppingCart:ShoppingCart;
   cartSubscription:any;
-  
+  onlyOnce:boolean=true;
   constructor(private productservice:ProductServiceService,private cartservice:CartService,private authservice:AuthService) { 
     console.log("Inn constuctor")
   }
@@ -24,12 +24,17 @@ export class ProductComponent implements OnInit , OnDestroy {
     this.cartservice.initializeCart();
     
     this.cartSubscription=this.cartservice.getShoppingCart().subscribe(value=>{
+      
      this.shoppingCart=value;
+     if(this.onlyOnce){
       this.productservice.getAll().subscribe(
         value=>{
+          
           this.products=value;
+          this.onlyOnce=false;
         }
       )
+     }
     })
     
     

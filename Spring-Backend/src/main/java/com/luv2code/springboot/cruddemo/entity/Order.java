@@ -13,6 +13,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.JoinTable;
 import java.util.*;
 import com.luv2code.springboot.cruddemo.entity.Product;
+import com.luv2code.springboot.cruddemo.entity.Transaction;
 import javax.validation.constraints.Pattern;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -61,7 +62,19 @@ public class Order {
 		this.flag = flag;
 	}
 
+    private Set<Transaction> transactions;
 
+	
+
+	@JsonManagedReference
+	@OneToMany(fetch = FetchType.EAGER,mappedBy="order")
+     public Set<Transaction> getTransactions() {
+		return this.transactions;
+	}
+
+	public void setTransactions(Set<Transaction> transactions) {
+		this.transactions = transactions;
+	}
 
     
     

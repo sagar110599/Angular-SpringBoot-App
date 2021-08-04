@@ -57,7 +57,7 @@ this.order_product=order_product.sort((a,b)=>a.id  <  b.id?-1:1);
       getTotalUniqueProducts(){
           return this.order_product.length;
       }
-      private getProductIndex(product:Product){
+       getProductIndex(product:Product){
         return this.order_product.findIndex(item=>item.product.id===product.id);
     }
    
