@@ -20,22 +20,19 @@ export class ProductComponent implements OnInit , OnDestroy {
     console.log("Inn constuctor")
   }
 
- async ngOnInit():Promise<void>{
-    this.cartservice.initializeCart();
-    
+  async ngOnInit():Promise<void>{
+    this.shoppingCart=await this.cartservice.getCart();
+    console.log("Got my cart");
+    this.productservice.getAll().subscribe(
+      value=>{
+        console.log("Now products are ready to be populated");
+        this.products=value;
+        
+      }
+    )
     this.cartSubscription=this.cartservice.getShoppingCart().subscribe(value=>{
-      
-     this.shoppingCart=value;
-     if(this.onlyOnce){
-      this.productservice.getAll().subscribe(
-        value=>{
-          
-          this.products=value;
-          this.onlyOnce=false;
-        }
-      )
-     }
-    })
+    this.shoppingCart=value;
+})
     
     
 }

@@ -1,5 +1,6 @@
 package com.luv2code.springboot.cruddemo.dao;
 
+import com.luv2code.springboot.cruddemo.security.jwt.RazorPayUtils;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
@@ -47,7 +48,6 @@ public class PaymentRepositoryImpl implements PaymentRepository {
 	public PaymentRepositoryImpl (@Value("${dama.app.rpayKey}") String key,@Value("${dama.app.rpaysecret}") String secret)throws RazorpayException {
 		this.key=key;
 		this.secret=secret;
-		System.out.println(key+"   "+secret);
 		this.client = new RazorpayClient(key,secret);
         
 	}
@@ -66,9 +66,7 @@ public class PaymentRepositoryImpl implements PaymentRepository {
 		if((q.list()).size()==0){
 		try{	
 			
-		
-			
-		com.razorpay.Order razorPayorder=createRazorPayOrder(orderRequest.getAmount());
+		com.razorpay.Order razorPayorder=RazorPayUtils.createRazorPayOrder(toPaise(orderRequest.getAmount()),this.client);
 		
 		Transaction transaction=new Transaction();
 		Order o=new Order();
@@ -80,23 +78,23 @@ public class PaymentRepositoryImpl implements PaymentRepository {
 		currentSession.saveOrUpdate(transaction);
         return transaction;
 		}catch(RazorpayException r){
-			System.out.println(r.getMessage());
-			System.out.println(r);
-		throw new DataNotFoundException("Something Went wrong in creating order");
+			throw new BadRequestException(r.getMessage());
 		}
 		}
+
 		Transaction transaction=(Transaction) q.list().get(0);
 		if(transaction.getTotal().equals(toPaise(orderRequest.getAmount())))
 		return transaction;
 		else{
 			try{
-			com.razorpay.Order razorPayorder=createRazorPayOrder(orderRequest.getAmount());
+			com.razorpay.Order razorPayorder=RazorPayUtils.createRazorPayOrder(orderRequest.getAmount(),this.client);
 			transaction.setRazor_oid((String)razorPayorder.get("id"));
 		    transaction.setTotal(toPaise(orderRequest.getAmount()));
 			currentSession.saveOrUpdate(transaction);
-		return transaction;}
+		return transaction;
+		}
 		catch(RazorpayException r){
-		throw new DataNotFoundException("Something Went wrong in creating order");
+		throw new BadRequestException(r.getMessage());
 		}
 		}
 	}
@@ -109,12 +107,14 @@ public class PaymentRepositoryImpl implements PaymentRepository {
 	
 	
     try{
-       String genSignature=Signature.calculateRFC2104HMAC(transaction.getRazor_oid()+"|"+transaction.getRazor_pid(),secret);
+       String genSignature=RazorPayUtils.calculateRFC2104HMAC(transaction.getRazor_oid()+"|"+transaction.getRazor_pid(),secret);
 	   System.out.println(genSignature);
 	   if(genSignature.equals(transaction.getRazor_sign())){
+		   RazorPayUtils.capturePayment(transaction.getRazor_pid(),transaction.getTotal(),this.client);
           transaction.setStatus(PaymentStatus.APPROVED);
 		  transaction.getOrder().setFlag(true);
 		  orderRepository.updateOrder(transaction.getOrder());
+
 		  currentSession.saveOrUpdate(transaction); 
 		  
 	   }else{
@@ -123,9 +123,8 @@ public class PaymentRepositoryImpl implements PaymentRepository {
 	   }
 
 	}catch(Exception e){
-		System.out.println(e);
-		System.out.println(e.getMessage());
-      throw new DataNotFoundException("Failed Transaction!! Try Again");
+		
+      throw new BadRequestException("Failed Transaction!! Try Again");
 	}
 	
 
@@ -135,50 +134,16 @@ public class PaymentRepositoryImpl implements PaymentRepository {
 
 
 	
-private com.razorpay.Order createRazorPayOrder(String amount) throws RazorpayException{
 
-JSONObject options=new JSONObject();
-String amountInPaise=toPaise(amount);
-options.put("amount",amountInPaise);
-options.put("currency","INR");
-return this.client.Orders.create(options);
-}
 private String toPaise(String paise) {
         BigDecimal b = new BigDecimal(paise);
         BigDecimal value = b.multiply(new BigDecimal("100"));
         return value.setScale(0, RoundingMode.UP).toString();
     }
 	
-private static class Signature {
-    private static final String HMAC_SHA256_ALGORITHM = "HmacSHA256";
-    
-    public static String calculateRFC2104HMAC(String data, String mysecret) throws java.security.SignatureException {
-        String result;
-        try {
- 
-            // get an hmac_sha256 key from the raw secret bytes
-			System.out.println("Inside calculate");
-			System.out.println(data+"       "+mysecret);
-            SecretKeySpec signingKey = new SecretKeySpec(mysecret.getBytes(), HMAC_SHA256_ALGORITHM);
-           System.out.println(signingKey);
-            // get an hmac_sha256 Mac instance and initialize with the signing
-            // key
-            Mac mac = Mac.getInstance(HMAC_SHA256_ALGORITHM);
-            mac.init(signingKey);
- 
-            // compute the hmac on input data bytes
-            byte[] rawHmac = mac.doFinal(data.getBytes());
- 
-            // base64-encode the hmac
-            result = DatatypeConverter.printHexBinary(rawHmac).toLowerCase();
-       System.out.println(result);
-        } catch (Exception e) {
-            throw new SignatureException("Failed to generate HMAC : " + e.getMessage());
-        }
-        return result;
-    }
+
 }
-}
+
 
 
 
