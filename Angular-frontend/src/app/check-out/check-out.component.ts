@@ -90,6 +90,7 @@ options:any;
     console.log(this.transaction);
     var t=await this.paymentservice.checkPayment(this.transaction)
     console.log(t);
+    console.log(t);
   }
 
 }
