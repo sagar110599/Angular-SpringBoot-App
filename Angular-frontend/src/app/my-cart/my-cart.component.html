@@ -1,5 +1,13 @@
+<div *ngIf="shoppingCart;then renderCart else renderLoader">
+</div>
+<ng-template #renderLoader>
+  <app-preloader></app-preloader>
+</ng-template>
+<ng-template #renderCart>
 <h1>Shopping Cart</h1>
-<div class="card" *ngIf="shoppingCart.order_product.length" style="width: 100%;">
+<div class="card" style="width: 100%;">
+  
+  
   <div class="card-body">
     <p>
       You have {{ shoppingCart.order_product.length }} items in your shopping cart.
@@ -7,7 +15,7 @@
 
     </p>
   </div>
-  <table class="table">
+  <table class="table" *ngIf="shoppingCart.order_product.length>0">
     <thead>
       <tr>
         <th></th>
@@ -62,3 +70,4 @@
     </tfoot>
   </table>
 </div>
+</ng-template>

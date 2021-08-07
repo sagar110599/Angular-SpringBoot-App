@@ -1,3 +1,9 @@
+<div *ngIf="products;then renderProducts else renderLoader">
+</div>
+<ng-template #renderLoader>
+  <app-preloader></app-preloader>
+</ng-template>
+<ng-template #renderProducts>
 <div class="row">
     <div class="col">
       
@@ -7,3 +13,5 @@
       </div>
     </div> 
     </div>
+</div>
+</ng-template>

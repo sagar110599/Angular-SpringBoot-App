@@ -5,7 +5,8 @@ import { AdminProductComponent } from './admin/admin-product/admin-product.compo
 import { AdminComponent } from './admin/admin.component';
 import { EditProductComponent } from './admin/edit-product/edit-product.component';
 import { CheckOutComponent } from './check-out/check-out.component';
-import { ErrorComponent } from './error/error.component';
+import { PageNotFoundComponent } from './error/page-not-found/page-not-found.component';
+import { UnauthAccessComponent } from './error/unauth-access/unauth-access.component';
 import { AdminGuard } from './guards/admin.guard';
 import { LoginComponent } from './login/login.component';
 import { MyCartComponent } from './my-cart/my-cart.component';
@@ -28,7 +29,8 @@ const routes: Routes = [
   component:AdminComponent 
   }
 ]},
-  {path: '**',component:ErrorComponent}
+  {path:"forbidden",component:UnauthAccessComponent},
+  {path: '**',component:PageNotFoundComponent}
 ];
 
 @NgModule({

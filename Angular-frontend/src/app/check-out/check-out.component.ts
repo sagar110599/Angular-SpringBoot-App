@@ -23,6 +23,7 @@ options:any;
   async ngOnInit(): Promise<void> {
     
     this.shoppingCart= await this.cartservice.getCart();
+    if(this.shoppingCart.getTotalCost()>0){
      this.transaction=await this.paymentservice.getRpayOrder({
     "userId":this.shoppingCart.user.id,   
     "orderId":this.shoppingCart.id,
@@ -30,6 +31,7 @@ options:any;
     });
     console.log(this.transaction); 
     this.createOptions(this.transaction);
+  }
     
     
   
